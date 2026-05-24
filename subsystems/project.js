@@ -1,5 +1,5 @@
 /* ============================================================
-   subsystems/project.js — 專案管理 Dashboard
+   subsystems/project.js — 專案管理儀表板
    依 10-專案管理.md
    ============================================================ */
 
@@ -36,7 +36,7 @@ SP.ProjectGantt = function ProjectGantt() {
   ];
   return (
     <>
-      <SP.PageHeader title="專案管理 Dashboard" subtitle="履約 28 個月 ・ 5 階段驗收" breadcrumb={["首頁", "專案管理"]} rfp="附錄六 + 伍/陸/柒/捌" actions={
+      <SP.PageHeader title="專案管理儀表板" subtitle="履約 28 個月 ・ 5 階段驗收" breadcrumb={["首頁", "專案管理"]} rfp="附錄六 + 伍/陸/柒/捌" actions={
         <>
           <SP.Button variant="primary" onClick={() => navigate("/project/team")}>👥 團隊</SP.Button>
           <SP.Button variant="secondary" onClick={() => navigate("/project/documents")}>📁 文件</SP.Button>
@@ -51,7 +51,7 @@ SP.ProjectGantt = function ProjectGantt() {
         <SP.KpiCard label="教育訓練"   value="8" suffix="場" hint="預計 264 人次" />
       </div>
 
-      <SP.Card title="5 階段 Gantt + 付款" subtitle="點階段查看細項">
+      <SP.Card title="5 階段甘特圖 + 付款" subtitle="點階段查看細項">
         <SP.GanttChart tasks={tasks} today="2026-07-15" height={260} />
       </SP.Card>
 

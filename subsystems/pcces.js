@@ -49,7 +49,7 @@ SP.PccesHome = function PccesHome() {
         subtitle="工程細目編碼 PCCES XML 4.3 + 編碼正確率 ≥ 40% 自動檢核"
         breadcrumb={["首頁", "工程預算 / PCCES"]}
         rfp="附錄一 四(八)"
-        actions={<SP.Button variant="primary" onClick={() => navigate("/pcces/wizard")}>開始新預算書 wizard</SP.Button>}
+        actions={<SP.Button variant="primary" onClick={() => navigate("/pcces/wizard")}>開始新預算書精靈</SP.Button>}
       />
 
       <div className="kpi-grid">
@@ -61,7 +61,7 @@ SP.PccesHome = function PccesHome() {
 
       <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.4fr) minmax(0,1fr)", gap: "var(--space-5)" }}>
         <SP.Card title="可建預算書案件" subtitle="從已修 / 結案案件選一個建立預算書" action={
-          <SP.Button size="sm" variant="primary" onClick={() => navigate("/pcces/wizard")}>進入 wizard</SP.Button>
+          <SP.Button size="sm" variant="primary" onClick={() => navigate("/pcces/wizard")}>進入精靈</SP.Button>
         }>
           <SP.Table
             compact
@@ -79,7 +79,7 @@ SP.PccesHome = function PccesHome() {
           <div className="flex-col" style={{ gap: "var(--space-3)" }}>
             <SP.Button variant="secondary" onClick={() => navigate("/pcces/items")}>📚 工項編碼資料庫（{SP.PCCES_ITEMS.length} 項）</SP.Button>
             <SP.Button variant="secondary" onClick={() => navigate("/pcces/budget")}>📊 預算書查詢</SP.Button>
-            <SP.Button variant="secondary" onClick={() => navigate("/pcces/wizard")}>🧙 5 步驟 wizard</SP.Button>
+            <SP.Button variant="secondary" onClick={() => navigate("/pcces/wizard")}>🧙 5 步驟精靈</SP.Button>
           </div>
         </SP.Card>
       </div>
@@ -87,7 +87,7 @@ SP.PccesHome = function PccesHome() {
   );
 };
 
-/* ---------- 5 步驟 wizard ---------- */
+/* ---------- 5 步驟精靈 ---------- */
 SP.PccesWizard = function PccesWizard() {
   const { state } = SP.useStore();
   const navigate = usePNav();
@@ -112,9 +112,9 @@ SP.PccesWizard = function PccesWizard() {
   return (
     <>
       <SP.PageHeader
-        title="PCCES 預算書 wizard"
+        title="PCCES 預算書精靈"
         subtitle={"步驟 " + step + " / 5：" + stepName[step]}
-        breadcrumb={["首頁", "PCCES", "wizard"]}
+        breadcrumb={["首頁", "PCCES", "精靈"]}
         rfp="四(八)3"
         actions={<SP.Button variant="ghost" onClick={() => navigate("/pcces")}>取消</SP.Button>}
       />

@@ -85,7 +85,7 @@ SP.SecurityAccessControl = function SecurityAccessControl() {
   const navigate = useSNav();
   return (
     <>
-      <SP.PageHeader title="存取控制 28 項" subtitle="附錄九 帳號 6 / 最小權限 / 遠端存取 / Session" breadcrumb={["首頁", "資安", "存取控制"]} rfp="附錄九"
+      <SP.PageHeader title="存取控制 28 項" subtitle="附錄九 帳號 6 / 最小權限 / 遠端存取 / 連線階段" breadcrumb={["首頁", "資安", "存取控制"]} rfp="附錄九"
         actions={<SP.Button variant="ghost" onClick={() => navigate("/security")}>返回</SP.Button>} />
       <SP.Card title="帳號管理（6 項）">
         <ul style={{ paddingLeft: "1.25rem", lineHeight: 1.8 }}>

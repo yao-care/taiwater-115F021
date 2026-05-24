@@ -439,7 +439,7 @@ SP.InspectionAdmin = function InspectionAdmin() {
           ]),
         },
         {
-          title: "11 角色 × 7 模組權限矩陣（demo）",
+          title: "11 角色 × 7 模組權限矩陣（示範）",
           subtitle: "R = 讀 / W = 寫 / ✓ = 全權 / — = 無權",
           kind: "table",
           headers: ["模組 \\ 角色", "系管", "總處", "區主", "廠所", "檢漏", "修漏", "客服", "DBA", "資安", "內稽", "外稽"],

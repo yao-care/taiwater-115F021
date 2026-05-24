@@ -90,7 +90,7 @@ SP.LoginPage = function LoginPage() {
 
       <div style={loginGridStyle}>
         {/* ---- 左：10 帳號直達 ---- */}
-        <SP.Card title="選擇示範角色直接登入" subtitle="點選即進入該角色 dashboard，不需密碼（POC 演示模式）" padding="0">
+        <SP.Card title="選擇示範角色直接登入" subtitle="點選即進入該角色儀表板，不需密碼（POC 演示模式）" padding="0">
           <div style={{ padding: "var(--space-2)" }}>
             {QUICK_ACCOUNTS.map(acc => {
               const u = state.users.find(x => x.id === acc.id);

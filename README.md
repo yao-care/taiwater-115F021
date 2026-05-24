@@ -20,7 +20,7 @@
 
 ## 🎯 5 條核心原則
 
-1. **10 帳號下拉直達**：點選帳號即進對應角色 Dashboard，不需密碼（demo 模式）。真實演示模式才會走 AD + 雙因素。
+1. **10 帳號下拉直達**：點選帳號即進對應角色儀表板，不需密碼（演示模式）。真實演示模式才會走 AD + 雙因素。
 2. **元件連動修改**：React Context + useReducer + localStorage。任一角色操作（建案 / 派工 / 上傳 / 結案）會即時反映在其他角色畫面。
 3. **日常工作即完成**：所有關鍵動作一鍵化（派工 / 結案 / 上傳自動帶 GPS / 推派廠所 / 通知）。
 4. **字體最小 18px**：符合 design-tokens 規範，老花用戶友善。
@@ -28,7 +28,7 @@
 
 ---
 
-## 👥 11 個角色 Dashboard
+## 👥 11 個角色儀表板
 
 | # | 角色 | 範例帳號 | 主場景 |
 |---|------|---------|--------|
@@ -50,12 +50,12 @@
 
 打開首頁後可開兩個分頁（一個客服 / 一個廠所）平行觀察：
 
-1. **客服 蔡美玲** 進入 Dashboard，按「+ 新案件（一鍵）」 → 自動帶民眾資訊 / GPS / 推派廠所 → 通知中港廠所
-2. **廠所 賴伯毅** Dashboard 紅點 +1 → 進「派工看板」 → 點「派檢漏員」 → 通知檢漏員王志強
+1. **客服 蔡美玲** 進入儀表板，按「+ 新案件（一鍵）」 → 自動帶民眾資訊 / GPS / 推派廠所 → 通知中港廠所
+2. **廠所 賴伯毅** 儀表板紅點 +1 → 進「派工看板」 → 點「派檢漏員」 → 通知檢漏員王志強
 3. **檢漏員 王志強** 行動版任務 +1 → 點「開始處理」 → 自動帶 GPS（WGS84 + TWD97）→ 「拍照」3 張 → 「一鍵送出」 → 廠所收到「待派修」通知
-4. **廠所** 看板 0053 移到「待修」column → 點「派修漏員」 → 通知修漏員林文雄
+4. **廠所** 看板 0053 移到「待修」欄位 → 點「派修漏員」 → 通知修漏員林文雄
 5. **修漏員 林文雄** 行動版 → 「實修登錄」 → 填挖填 / 漏水量 / 費用 → 「一鍵結案」 → 自動回客服 + 寫稽核日誌
-6. **任一角色** 進「角色 Dashboard → 案件即時追蹤」可看到 0053 完整 timeline 跨 4 角色
+6. **任一角色** 進「角色儀表板 → 案件即時追蹤」可看到 0053 完整 timeline 跨 4 角色
 
 ---
 
@@ -64,9 +64,9 @@
 - **流程 B**：行動版檢漏員一日（純行動版 5 頁可玩）
 - **流程 C**：廠所派工管理（看板 + 派工紀錄）
 - **流程 D**：年度成果報告書（16 章自動從 store 計算 → 一鍵匯出 ODF）
-- **流程 E**：PCCES 工程預算書 5 步驟 wizard（XML 4.3 + 編碼正確率 ≥ 40% 自動檢核）
+- **流程 E**：PCCES 工程預算書 5 步驟精靈（XML 4.3 + 編碼正確率 ≥ 40% 自動檢核）
 - **流程 F**：資安合規檢核（12 構面 + SBOM + 弱掃 / 滲透 + ISMS + 稽核日誌 + 內外稽核唯讀視角）
-- **流程 G**：介接管理（14 系統健康度 + topology 架構圖 + WMTS / WMS 圖層）
+- **流程 G**：介接管理（14 系統健康度 + 節點關聯架構圖 + WMTS / WMS 圖層）
 
 ---
 
@@ -97,23 +97,23 @@
 ├── index.html               主入口 + CDN + Router
 ├── shared/
 │   ├── tokens.css          oklch + 18px 字級
-│   ├── layout.css          AppShell + 卡片 + 表格 + Modal + Toast
+│   ├── layout.css          版面骨架 + 卡片 + 表格 + 對話框 + 浮動訊息
 │   ├── store.js            Context + useReducer + localStorage + 7 reducer actions
 │   ├── mock-data.js        41 員工 / 53 案件 / 200 管段 / 14 介接 / 20 廠商
 │   ├── components.js       17 個基礎 UI 元件
-│   ├── charts.js           D3：Bar / Rank / Line / Pie / Gantt / SparkLine / HeatMap / Progress
+│   ├── charts.js           D3：直條 / 排名 / 折線 / 圓餅 / 甘特 / 微縮折線 / 熱區 / 進度
 │   ├── maps.js             GisMap（台灣輪廓 + 13 區處 + WMTS/WMS toggle）
 │   ├── mobile-kit.js       PhoneFrame / StatusBar / AppBar / TabBar / PhotoGrid / Coordinate
 │   ├── business-widgets.js CaseCard / CaseTimeline / DispatchBoard / IntegrationStatus 等
-│   ├── layout.js           AppHeader + AppNav（10 子系統 + 角色動態過濾）
+│   ├── layout.js           上方列 + 側邊導覽（10 子系統 + 角色動態過濾）
 │   └── home.js             系統首頁（KPI + 最新案件 + 通知 + 介接狀態）
 ├── subsystems/
 │   ├── login.js            11 帳號直達 + 真實演示模式
-│   ├── dashboard.js        11 角色 sub-dashboard + 案件即時追蹤
+│   ├── dashboard.js        11 角色 子儀表板 + 案件即時追蹤
 │   ├── inspection.js       檢漏子系統 B（首頁 + 案件處理單 + 進階作業 + 年度作業 + 報表 + 規定 + 管理）
 │   ├── repair.js           修漏子系統 C（首頁 + 派工看板 + 案件詳情 + 申報 + 記錄 + 統計 + 報表 + 管理）
-│   ├── pcces.js            工程預算書 + PCCES XML 4.3 wizard
-│   ├── integration.js      14 系統清單 + 健康度 + 架構圖 + WMTS + log
+│   ├── pcces.js            工程預算書 + PCCES XML 4.3 精靈
+│   ├── integration.js      14 系統清單 + 健康度 + 架構圖 + 圖層 + 同步記錄
 │   ├── mobile.js           檢漏員 + 修漏員行動版（各 5 頁 + 真實可操作）
 │   ├── annual-report.js    16 章自動產生 + 10 章年度版 + ODF 匯出
 │   ├── security.js         12 構面 + 存取控制 + SBOM + 第三方檢測 + ISMS + 稽核

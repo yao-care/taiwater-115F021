@@ -31,7 +31,7 @@ SP.IntegrationList = function IntegrationList() {
         </>
       } />
       <SP.Card padding="0">
-        <SP.Table headers={["名稱", "協定", "Owner", "Endpoint", "狀態", "延遲", "錯誤率"]} rows={state.integrations.map(i => [
+        <SP.Table headers={["名稱", "協定", "主責", "端點", "狀態", "延遲", "錯誤率"]} rows={state.integrations.map(i => [
           <span style={{ fontWeight: 600 }}>{i.name}</span>,
           <SP.Badge tone="info">{i.protocol}</SP.Badge>,
           <span className="text-sm muted">{i.owner}</span>,
@@ -123,7 +123,7 @@ SP.IntegrationTopology = function IntegrationTopology() {
 
   return (
     <>
-      <SP.PageHeader title="介接架構圖" subtitle="14 系統 topology" breadcrumb={["首頁", "介接", "架構圖"]} rfp="D03" actions={<SP.Button variant="ghost" onClick={() => navigate("/integration")}>返回</SP.Button>} />
+      <SP.PageHeader title="介接架構圖" subtitle="14 系統節點關聯" breadcrumb={["首頁", "介接", "架構圖"]} rfp="D03" actions={<SP.Button variant="ghost" onClick={() => navigate("/integration")}>返回</SP.Button>} />
       <SP.Card>
         <svg ref={ref} style={{ width: "100%", display: "block" }} />
         <div className="text-xs muted mt-2" style={{ textAlign: "center" }}>中央為本系統 ・ 14 個外部介接系統（依協定 / 健康度色彩編碼）</div>
@@ -152,7 +152,7 @@ SP.IntegrationLogs = function IntegrationLogs() {
   const navigate = useINav();
   return (
     <>
-      <SP.PageHeader title="介接 log" subtitle="近期同步記錄" breadcrumb={["首頁", "介接", "log"]} rfp="附錄一 四(九)~(十五)" actions={<SP.Button variant="ghost" onClick={() => navigate("/integration")}>返回</SP.Button>} />
+      <SP.PageHeader title="介接同步記錄" subtitle="近期同步記錄" breadcrumb={["首頁", "介接", "同步記錄"]} rfp="附錄一 四(九)~(十五)" actions={<SP.Button variant="ghost" onClick={() => navigate("/integration")}>返回</SP.Button>} />
       <SP.Card padding="0">
         <SP.Table headers={["時間", "系統", "事件", "狀態", "延遲"]} rows={state.integrations.map((i, idx) => [
           <span className="text-sm muted">{SP.format.datetime(i.lastSyncAt)}</span>,

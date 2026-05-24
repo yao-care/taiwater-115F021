@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>台水檢修漏管理資訊系統 POC ・ 115F021</title>
+  <meta name="description" content="台灣自來水股份有限公司 檢修漏管理資訊系統改版整合案 — 公開徵求 POC（藥提醒科技）" />
+
+  <!-- ============ Design Tokens & Layout ============ -->
+  <link rel="stylesheet" href="shared/tokens.css" />
+  <link rel="stylesheet" href="shared/layout.css" />
+
+  <!-- ============ External CDN ============ -->
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <!-- React Router v6.3.0（順序：history → react-router → react-router-dom） -->
+  <script crossorigin src="https://unpkg.com/history@5.3.0/umd/history.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-router@6.3.0/umd/react-router.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.production.min.js"></script>
+  <!-- D3 v7（圖表 / 地圖，階段 2 起使用） -->
+  <script crossorigin src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
+  <!-- Babel Standalone（瀏覽器內 JSX 編譯） -->
+  <script crossorigin src="https://unpkg.com/@babel/standalone@7.25.7/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root">
+    <div class="loading-screen">系統啟動中...</div>
+  </div>
+
+  <!-- ============ Shared（依序載入） ============ -->
+  <script type="text/babel" data-presets="env,react" src="shared/mock-data.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/store.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/components.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/charts.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/maps.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/mobile-kit.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/business-widgets.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/layout.js"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/home.js"></script>
+
+  <!-- ============ Subsystems ============ -->
+  <script type="text/babel" data-presets="env,react" src="subsystems/login.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/dashboard.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/inspection.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/repair.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/mobile.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/annual-report.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/pcces.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/security.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/integration.js"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/project.js"></script>
+
+  <!-- ============ App Bootstrap ============ -->
+  <script type="text/babel" data-presets="env,react">
+    const { HashRouter, Routes, Route, Navigate } = ReactRouterDOM;
+
+    function App() {
+      // 階段 1：預設帶入系統管理員，使 Header / Nav 可完整展示
+      // 階段 2 完成 Login 後，此處改為依 currentUser 渲染 Login 或主畫面
+      const { state, dispatch } = SP.useStore();
+      React.useEffect(() => {
+        if (!state.currentUser) {
+          const admin = state.users.find(u => u.role === "admin");
+          if (admin) dispatch({ type: "LOGIN", payload: admin, authMode: "demo" });
+        }
+      }, []);
+
+      return (
+        <SP.AppShell>
+          <Routes>
+            <Route path="/"               element={<SP.HomePage />} />
+            <Route path="/login"          element={<SP.LoginPage />} />
+            <Route path="/dashboard/*"    element={<SP.DashboardPage />} />
+            <Route path="/inspection/*"   element={<SP.InspectionPage />} />
+            <Route path="/repair/*"       element={<SP.RepairPage />} />
+            <Route path="/mobile/*"       element={<SP.MobilePage />} />
+            <Route path="/annual-report/*" element={<SP.AnnualReportPage />} />
+            <Route path="/pcces/*"        element={<SP.PccesPage />} />
+            <Route path="/security/*"     element={<SP.SecurityPage />} />
+            <Route path="/integration/*"  element={<SP.IntegrationPage />} />
+            <Route path="/project/*"      element={<SP.ProjectPage />} />
+            <Route path="*"               element={<Navigate to="/" replace />} />
+          </Routes>
+        </SP.AppShell>
+      );
+    }
+
+    function Root() {
+      return (
+        <SP.StoreProvider>
+          <HashRouter>
+            <App />
+          </HashRouter>
+        </SP.StoreProvider>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<Root />);
+  </script>
+</body>
+</html>

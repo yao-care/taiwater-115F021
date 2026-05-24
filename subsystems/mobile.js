@@ -308,7 +308,7 @@ SP.MobileInspector = function MobileInspector() {
     <>
       <SP.PageHeader
         title="行動版（檢漏員）"
-        subtitle="王志強 ・ 中港廠所 ・ React 元件真實可操作"
+        subtitle="王志強 ・ 中港廠所 ・ 真實可操作（仿 React Native 行動端）"
         breadcrumb={["首頁", "行動版", "檢漏員"]}
         rfp="附錄一 二(二)"
       />

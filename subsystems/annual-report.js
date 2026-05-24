@@ -153,7 +153,7 @@ SP.AnnualReport16 = function AnnualReport16() {
               ? <div style={{ marginTop: "var(--space-4)", lineHeight: "1.8", fontSize: "var(--text-base)" }}>{content}</div>
               : <textarea
                   style={{ marginTop: "var(--space-4)", width: "100%", minHeight: "28rem", padding: "var(--space-3)", border: "1px solid var(--border-strong)", borderRadius: "var(--radius-md)", fontSize: "var(--text-sm)", fontFamily: "var(--font-sans)", lineHeight: 1.6 }}
-                  defaultValue={typeof content === "string" ? content : "自動產生內容（編輯模式 demo）"}
+                  defaultValue={typeof content === "string" ? content : "自動產生內容（編輯模式示範）"}
                 />
             }
           </div>

@@ -1,11 +1,11 @@
 /* ============================================================
-   subsystems/dashboard.js — 11 角色 Dashboard
+   subsystems/dashboard.js — 11 角色儀表板
    依 06-Dashboard.md，11 個 sub-dashboard + 案件即時追蹤
    ============================================================ */
 
 window.SP = window.SP || {};
 
-/* ---------- Dashboard Router（依 currentUser.role 分派） ---------- */
+/* ---------- 儀表板 Router（依 currentUser.role 分派） ---------- */
 SP.DashboardPage = function DashboardPage() {
   const { state } = SP.useStore();
   const navigate = ReactRouterDOM.useNavigate();
@@ -41,7 +41,7 @@ SP.DashboardPage = function DashboardPage() {
 };
 
 /* ============================================================
-   1. 系統管理員 Dashboard
+   1. 系統管理員儀表板
    ============================================================ */
 SP.AdminDashboard = function AdminDashboard() {
   const { state } = SP.useStore();
@@ -53,9 +53,9 @@ SP.AdminDashboard = function AdminDashboard() {
   return (
     <>
       <SP.PageHeader
-        title="系統管理員 Dashboard"
+        title="系統管理員儀表板"
         subtitle="李宗翰 ・ 系統管理員 ・ 全功能後台"
-        breadcrumb={["首頁", "Dashboard", "系統管理員"]}
+        breadcrumb={["首頁", "儀表板", "系統管理員"]}
         rfp="附錄一 三(二)、附錄九"
       />
       <div className="kpi-grid">
@@ -74,7 +74,7 @@ SP.AdminDashboard = function AdminDashboard() {
 };
 
 /* ============================================================
-   2. 總處管理員 Dashboard
+   2. 總處管理員儀表板
    ============================================================ */
 SP.HqDashboard = function HqDashboard() {
   const { state } = SP.useStore();
@@ -87,9 +87,9 @@ SP.HqDashboard = function HqDashboard() {
   return (
     <>
       <SP.PageHeader
-        title="總處管理員 Dashboard"
+        title="總處管理員儀表板"
         subtitle="周明德 ・ 總處 ・ 全國 KPI / 政策 / 年度計畫"
-        breadcrumb={["首頁", "Dashboard", "總處"]}
+        breadcrumb={["首頁", "儀表板", "總處"]}
         rfp="附錄一 三(五)"
       />
       <div className="kpi-grid">
@@ -136,7 +136,7 @@ SP.HqDashboard = function HqDashboard() {
 };
 
 /* ============================================================
-   3. 區處主管 Dashboard
+   3. 區處主管儀表板
    ============================================================ */
 SP.RegionDashboard = function RegionDashboard() {
   const { state } = SP.useStore();
@@ -150,9 +150,9 @@ SP.RegionDashboard = function RegionDashboard() {
   return (
     <>
       <SP.PageHeader
-        title="區處主管 Dashboard"
+        title="區處主管儀表板"
         subtitle={state.currentUser.name + " ・ " + region + " ・ 區處績效 / 月報審核 / 年度報告書"}
-        breadcrumb={["首頁", "Dashboard", "區處主管"]}
+        breadcrumb={["首頁", "儀表板", "區處主管"]}
         rfp="附錄一 三(五)+(六)"
       />
       <div className="kpi-grid">
@@ -180,7 +180,7 @@ SP.RegionDashboard = function RegionDashboard() {
 };
 
 /* ============================================================
-   4. 廠所人員 Dashboard
+   4. 廠所人員儀表板
    ============================================================ */
 SP.PlantDashboard = function PlantDashboard() {
   const { state } = SP.useStore();
@@ -196,9 +196,9 @@ SP.PlantDashboard = function PlantDashboard() {
   return (
     <>
       <SP.PageHeader
-        title="廠所人員 Dashboard"
+        title="廠所人員儀表板"
         subtitle={user.name + " ・ " + plant + " ・ 派工 + 工程預算書"}
-        breadcrumb={["首頁", "Dashboard", "廠所人員"]}
+        breadcrumb={["首頁", "儀表板", "廠所人員"]}
         rfp="附錄一 四(一)~(八)"
       />
       <div className="kpi-grid">
@@ -268,7 +268,7 @@ SP.PlantDashboard = function PlantDashboard() {
 };
 
 /* ============================================================
-   5. 客服人員 Dashboard
+   5. 客服人員儀表板
    ============================================================ */
 SP.CsDashboard = function CsDashboard() {
   const { state, dispatch } = SP.useStore();
@@ -305,9 +305,9 @@ SP.CsDashboard = function CsDashboard() {
   return (
     <>
       <SP.PageHeader
-        title="客服人員 Dashboard"
+        title="客服人員儀表板"
         subtitle={state.currentUser.name + " ・ 客服中心 1910 ・ 案件申報與後送"}
-        breadcrumb={["首頁", "Dashboard", "客服"]}
+        breadcrumb={["首頁", "儀表板", "客服"]}
         rfp="附錄一 四(三)"
       />
       <div className="kpi-grid">
@@ -343,7 +343,7 @@ SP.CsDashboard = function CsDashboard() {
 };
 
 /* ============================================================
-   6. DBA Dashboard
+   6. DBA 儀表板
    ============================================================ */
 SP.DbaDashboard = function DbaDashboard() {
   const { state } = SP.useStore();
@@ -353,9 +353,9 @@ SP.DbaDashboard = function DbaDashboard() {
   return (
     <>
       <SP.PageHeader
-        title="DBA Dashboard"
+        title="DBA 儀表板"
         subtitle={state.currentUser.name + " ・ 資訊處 ・ DB 效能 / HA / SSRS / SSIS"}
-        breadcrumb={["首頁", "Dashboard", "DBA"]}
+        breadcrumb={["首頁", "儀表板", "DBA"]}
         rfp="附錄九 系統與資訊完整性 + 營運持續"
       />
       <div className="kpi-grid">
@@ -418,7 +418,7 @@ SP.DbaDashboard = function DbaDashboard() {
 };
 
 /* ============================================================
-   7. 資安人員 Dashboard
+   7. 資安人員儀表板
    ============================================================ */
 SP.SecurityDashboard = function SecurityDashboard() {
   const { state } = SP.useStore();
@@ -426,9 +426,9 @@ SP.SecurityDashboard = function SecurityDashboard() {
   return (
     <>
       <SP.PageHeader
-        title="資安人員 Dashboard"
+        title="資安人員儀表板"
         subtitle={state.currentUser.name + " ・ 資訊處資安 ・ ISMS + SBOM + 12 構面"}
-        breadcrumb={["首頁", "Dashboard", "資安人員"]}
+        breadcrumb={["首頁", "儀表板", "資安人員"]}
         rfp="附錄九 全文"
       />
       <div className="kpi-grid">
@@ -469,7 +469,7 @@ const SECURITY_DOMAINS = [
 ];
 
 /* ============================================================
-   8. 內 / 外稽核 Dashboard（共用，唯讀）
+   8. 內 / 外稽核 儀表板（共用，唯讀）
    ============================================================ */
 SP.AuditDashboard = function AuditDashboard() {
   const { state } = SP.useStore();
@@ -479,9 +479,9 @@ SP.AuditDashboard = function AuditDashboard() {
   return (
     <>
       <SP.PageHeader
-        title={(isExt ? "外部稽核員" : "內部稽核員") + " Dashboard（唯讀）"}
+        title={(isExt ? "外部稽核員" : "內部稽核員") + " 儀表板（唯讀）"}
         subtitle={state.currentUser.name + (isExt ? " ・ ISO 27001 LA / BSI Taiwan" : " ・ 稽核室")}
-        breadcrumb={["首頁", "Dashboard", isExt ? "外稽" : "內稽"]}
+        breadcrumb={["首頁", "儀表板", isExt ? "外稽" : "內稽"]}
         rfp="附錄九 + ISO 27001"
       />
       <div className="kpi-grid">
@@ -538,7 +538,7 @@ SP.CaseTrackView = function CaseTrackView() {
       <SP.PageHeader
         title="案件即時追蹤"
         subtitle="跨角色生命週期觀察 ・ 任一角色操作即時反映在此 timeline"
-        breadcrumb={["首頁", "Dashboard", "案件追蹤"]}
+        breadcrumb={["首頁", "儀表板", "案件追蹤"]}
         rfp="流程 A"
       />
 
