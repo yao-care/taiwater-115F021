@@ -1,0 +1,177 @@
+/* ============================================================
+   台水檢修漏管理資訊系統 POC — Design Tokens
+   原則 4：最小字級 18px
+   原則 5：oklch 配色，hex 僅作 @supports not fallback
+   ============================================================ */
+
+:root {
+  /* ---------- 字級（最小 18px） ---------- */
+  --text-xs:   1.125rem;   /* 18px — 徽章/標籤 */
+  --text-sm:   1.25rem;    /* 20px — 表格內文 */
+  --text-base: 1.5rem;     /* 24px — 正文 */
+  --text-lg:   1.75rem;    /* 28px — 強調 */
+  --text-xl:   2rem;       /* 32px — 區段標題 */
+  --text-2xl:  3rem;       /* 48px — 卡片數字 */
+  --text-3xl:  3.5rem;     /* 56px — 頁面標題 */
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* ---------- 字型 ---------- */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei",
+               "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif;
+  --font-mono: "SF Mono", "Consolas", "Monaco", monospace;
+
+  /* ---------- 台水企業色（oklch） ---------- */
+  --tw-primary:       oklch(0.34 0.08 250);   /* 深藍 #003366 */
+  --tw-primary-dark:  oklch(0.27 0.08 250);   /* 更深 #00214a */
+  --tw-primary-light: oklch(0.46 0.10 245);   /* 中藍 #1e5b96 */
+  --tw-accent:        oklch(0.60 0.10 245);   /* 水藍 #4a90c2 */
+  --tw-water:         oklch(0.85 0.07 230);   /* 淺水 #b3d4f0 */
+  --tw-water-light:   oklch(0.93 0.03 230);   /* 極淺 #e0eef9 */
+
+  /* ---------- 中性背景 ---------- */
+  --bg-base:    oklch(0.97 0.005 250);
+  --bg-surface: oklch(1.00 0 0);
+  --bg-overlay: oklch(0.93 0.005 250);
+  --bg-muted:   oklch(0.96 0.008 250);
+
+  /* ---------- 邊框 ---------- */
+  --border-base:   oklch(0.88 0.008 250);
+  --border-strong: oklch(0.75 0.01 250);
+  --border-focus:  oklch(0.55 0.15 250);
+
+  /* ---------- 文字 ---------- */
+  --text-primary:   oklch(0.20 0.01 250);
+  --text-secondary: oklch(0.45 0.01 250);
+  --text-muted:     oklch(0.60 0.008 250);
+  --text-inverse:   oklch(0.98 0 0);
+  --text-link:      oklch(0.45 0.15 250);
+
+  /* ---------- 嚴重度（紅橘黃藍綠） ---------- */
+  --color-critical: oklch(0.55 0.22 25);
+  --color-high:     oklch(0.55 0.16 55);
+  --color-medium:   oklch(0.55 0.14 80);
+  --color-low:      oklch(0.52 0.13 240);
+  --color-pass:     oklch(0.48 0.16 150);
+  --color-info:     oklch(0.55 0.12 230);
+
+  /* 嚴重度背景（淡） */
+  --bg-critical: oklch(0.95 0.03 25);
+  --bg-high:     oklch(0.95 0.03 55);
+  --bg-medium:   oklch(0.95 0.03 80);
+  --bg-low:      oklch(0.95 0.03 240);
+  --bg-pass:     oklch(0.95 0.03 150);
+
+  /* ---------- 陰影 ---------- */
+  --shadow-sm: 0 1px 2px oklch(0.2 0.02 250 / 0.06);
+  --shadow-md: 0 4px 12px oklch(0.2 0.02 250 / 0.08);
+  --shadow-lg: 0 10px 30px oklch(0.2 0.02 250 / 0.12);
+
+  /* ---------- 圓角 ---------- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* ---------- 間距 ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* ---------- Z-index 層級 ---------- */
+  --z-nav: 10;
+  --z-header: 20;
+  --z-modal: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
+}
+
+/* ---------- hex fallback（舊瀏覽器） ---------- */
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --tw-primary:       #003366;
+    --tw-primary-dark:  #00214a;
+    --tw-primary-light: #1e5b96;
+    --tw-accent:        #4a90c2;
+    --tw-water:         #b3d4f0;
+    --tw-water-light:   #e0eef9;
+
+    --bg-base:    #f5f7fa;
+    --bg-surface: #ffffff;
+    --bg-overlay: #e8ecf2;
+    --bg-muted:   #f0f3f7;
+
+    --border-base:   #d5dae2;
+    --border-strong: #aeb6c2;
+    --border-focus:  #2563eb;
+
+    --text-primary:   #1a2330;
+    --text-secondary: #5a6372;
+    --text-muted:     #828c99;
+    --text-inverse:   #fafafa;
+    --text-link:      #1d4ed8;
+
+    --color-critical: #d93b3b;
+    --color-high:     #d97706;
+    --color-medium:   #ca8a04;
+    --color-low:      #2563eb;
+    --color-pass:     #16a34a;
+    --color-info:     #0891b2;
+
+    --bg-critical: #fef2f2;
+    --bg-high:     #fff7ed;
+    --bg-medium:   #fefce8;
+    --bg-low:      #eff6ff;
+    --bg-pass:     #f0fdf4;
+  }
+}
+
+/* ---------- Reset + Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 16px; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  background: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 { margin: 0; font-weight: 700; line-height: var(--leading-tight); }
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-xl); }
+h3 { font-size: var(--text-lg); }
+h4, h5, h6 { font-size: var(--text-base); }
+
+p { margin: 0 0 var(--space-3); }
+
+a { color: var(--text-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: var(--text-sm);
+}
+
+table { border-collapse: collapse; }
+
+code, kbd, pre, samp { font-family: var(--font-mono); }
