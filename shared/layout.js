@@ -12,7 +12,7 @@ SP.NAV_GROUPS = [
     title: "我的工作",
     items: [
       { path: "/",                       icon: "🏠", label: "首頁",             roles: ["all"] },
-      { path: "/dashboard",              icon: "📊", label: "角色 Dashboard",    roles: ["all"] },
+      { path: "/dashboard",              icon: "📊", label: "角色儀表板",    roles: ["all"] },
       { path: "/dashboard/case-track",   icon: "🔭", label: "案件即時追蹤",      roles: ["admin", "hq", "region", "plant", "cs"] },
       { path: "/login",                  icon: "🔑", label: "登入頁",            roles: ["all"] },
     ],
@@ -49,7 +49,7 @@ SP.NAV_GROUPS = [
     title: "工程預算 / PCCES",
     items: [
       { path: "/pcces",         icon: "💰", label: "PCCES 首頁",       roles: ["plant", "admin"] },
-      { path: "/pcces/wizard",  icon: "🧙", label: "預算書 wizard",     roles: ["plant", "admin"] },
+      { path: "/pcces/wizard",  icon: "🧙", label: "預算書精靈",     roles: ["plant", "admin"] },
       { path: "/pcces/items",   icon: "📚", label: "工項編碼資料庫",    roles: ["plant", "admin"] },
       { path: "/pcces/budget",  icon: "📊", label: "預算書查詢",        roles: ["plant", "region", "admin"] },
     ],
@@ -78,7 +78,7 @@ SP.NAV_GROUPS = [
       { path: "/integration/health",   icon: "❤️", label: "健康度監控",    roles: ["admin", "dba", "security"] },
       { path: "/integration/topology", icon: "🌐", label: "介接架構圖",    roles: ["admin", "dba", "hq"] },
       { path: "/integration/wmts",     icon: "🗺️", label: "WMTS / WMS",    roles: ["admin", "dba", "plant"] },
-      { path: "/integration/logs",     icon: "📜", label: "介接 log",       roles: ["admin", "dba"] },
+      { path: "/integration/logs",     icon: "📜", label: "介接同步記錄",       roles: ["admin", "dba"] },
     ],
   },
   {
@@ -98,7 +98,7 @@ SP.NAV_GROUPS = [
     id: "project",
     title: "專案管理",
     items: [
-      { path: "/project/gantt",        icon: "🗓️", label: "5 階段 Gantt",  roles: ["admin", "hq"] },
+      { path: "/project/gantt",        icon: "🗓️", label: "5 階段甘特圖",  roles: ["admin", "hq"] },
       { path: "/project/payment",      icon: "💰", label: "付款進度",       roles: ["admin", "hq"] },
       { path: "/project/team",         icon: "👥", label: "專案團隊",       roles: ["admin", "hq"] },
       { path: "/project/training",     icon: "🎓", label: "教育訓練",       roles: ["admin", "hq", "region"] },
@@ -146,7 +146,7 @@ SP.AppHeader = function AppHeader() {
   };
 
   const resetDemo = () => {
-    if (window.confirm("重新初始化所有 demo 資料？（清空 localStorage）")) {
+    if (window.confirm("重新初始化所有演示資料？（清空 localStorage）")) {
       dispatch({ type: "RESET_DEMO" });
       navigate("/");
     }
@@ -206,7 +206,7 @@ SP.AppHeader = function AppHeader() {
           {roleMenuOpen && (
             <div style={{ ...dropdownStyle, width: "20rem" }}>
               <div style={{ padding: "0.5rem 0.75rem", fontSize: "var(--text-xs)", color: "var(--text-muted)", borderBottom: "1px solid var(--border-base)" }}>
-                點選角色直達該 dashboard（demo 用）
+                點選角色直達該儀表板（演示用）
               </div>
               {roleSamples.map(u => (
                 <button key={u.id} style={dropdownItemStyle(user?.id === u.id)} onClick={() => switchRole(u)}>
