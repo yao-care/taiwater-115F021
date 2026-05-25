@@ -64,7 +64,7 @@ SP.ProjectGantt = function ProjectGantt() {
           </div>
           <SP.Button size="sm" variant="ghost" className="mt-2" onClick={() => navigate("/project/payment")}>查看完整 →</SP.Button>
         </SP.Card>
-        <SP.Card title="罰則對照" subtitle="附錄捌">
+        <SP.Card title="罰則對照" subtitle="捌 罰則">
           <ul style={{ paddingLeft: "1.25rem", fontSize: "var(--text-sm)", lineHeight: 1.7 }}>
             <li>一般違反 0.1% / 日</li>
             <li>合計 ≥ 20% 終止契約</li>
@@ -112,7 +112,7 @@ SP.ProjectTeam = function ProjectTeam() {
   const navigate = usePJNav();
   return (
     <>
-      <SP.PageHeader title="專案團隊" subtitle={state.team.length + " 位成員 ・ 兼任 ≤ 2"} breadcrumb={["首頁", "專案", "團隊"]} rfp="附錄六 三" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
+      <SP.PageHeader title="專案團隊" subtitle={state.team.length + " 位成員 ・ 兼任 ≤ 2"} breadcrumb={["首頁", "專案", "團隊"]} rfp="伍、三 專案工作小組與人員能力需求" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
       <SP.Card padding="0">
         <SP.Table headers={["姓名", "角色", "公司", "年資", "證照"]} rows={state.team.map(t => [
           <span style={{ fontWeight: 600 }}>{t.name}</span>,
@@ -133,7 +133,7 @@ SP.ProjectTraining = function ProjectTraining() {
   const totalAttendees = state.trainings.reduce((s, t) => s + t.attendees, 0);
   return (
     <>
-      <SP.PageHeader title="教育訓練" subtitle={state.trainings.length + " 場 / " + totalHours + " 小時 / 預計 " + totalAttendees + " 人次"} breadcrumb={["首頁", "專案", "訓練"]} rfp="附錄四 教育訓練需求" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
+      <SP.PageHeader title="教育訓練" subtitle={state.trainings.length + " 場 / " + totalHours + " 小時 / 預計 " + totalAttendees + " 人次"} breadcrumb={["首頁", "專案", "訓練"]} rfp="伍、四 教育訓練需求" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
       <SP.Card padding="0">
         <SP.Table headers={["場次", "對象", "時數", "人數", "日期"]} rows={state.trainings.map(t => [
           <span style={{ fontWeight: 600 }}>{t.name}</span>,
@@ -151,7 +151,7 @@ SP.ProjectPenalty = function ProjectPenalty() {
   const navigate = usePJNav();
   return (
     <>
-      <SP.PageHeader title="罰則對照表" subtitle="附錄捌" breadcrumb={["首頁", "專案", "罰則"]} rfp="附錄捌" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
+      <SP.PageHeader title="罰則對照表" subtitle="捌 罰則" breadcrumb={["首頁", "專案", "罰則"]} rfp="捌 罰則" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
       <SP.Card>
         <SP.Table headers={["違反項目", "罰款基準", "備註"]} rows={[
           ["一般違反", "千分之 1 / 日", "依履約金額"],
@@ -172,7 +172,7 @@ SP.ProjectDocuments = function ProjectDocuments() {
   const navigate = usePJNav();
   return (
     <>
-      <SP.PageHeader title="文件中心" subtitle={state.documents.length + " 種交付文件"} breadcrumb={["首頁", "專案", "文件"]} rfp="附錄六 二" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
+      <SP.PageHeader title="文件中心" subtitle={state.documents.length + " 種交付文件"} breadcrumb={["首頁", "專案", "文件"]} rfp="附錄六 交付文件建議內容" actions={<SP.Button variant="ghost" onClick={() => navigate("/project")}>返回</SP.Button>} />
       <SP.Card padding="0">
         <SP.Table headers={["文件", "類型", "階段", "版本", "狀態", "操作"]} rows={state.documents.map(d => [
           <span style={{ fontWeight: 600 }}>{d.name}</span>,

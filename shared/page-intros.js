@@ -38,13 +38,13 @@ SP.PAGE_INTROS = {
     ],
   },
   "/dashboard/case-track": {
-    title: "案件即時追蹤（流程 A 跨角色觀察）",
-    body: "左側為案件清單，右側為該案件的完整 timeline。",
+    title: "案件即時追蹤（demo 加值）",
+    body: "左側為案件清單，右側為該案件的完整 timeline。本頁為 demo 加值，整合多節資料便於評委觀察跨角色連動。",
     steps: [
-      { selector: ".page-header", position: "bottom", rfp: "流程 A", title: "案件 360 度追蹤", body: "本頁讓您即時觀察任一案件的完整生命週期，跨 4 個角色（客服 → 廠所 → 檢漏員 → 修漏員）所有操作都會記錄在此。" },
-      { selector: ".app-main", position: "left", rfp: "三(三)1", title: "左：案件清單", body: "預設列出 53 件案件，依建立時間排序。點任一案件可在右側看詳情與 timeline。" },
-      { selector: ".app-main", position: "left", rfp: "三(三)2", title: "右上：案件資訊", body: "案件基本資料：區處、廠所、嚴重度、狀態、案件來源、負責人、GPS 座標、建立時間。" },
-      { selector: ".app-main", position: "left", rfp: "流程 A", title: "右下：完整 timeline", body: "每筆事件含操作人、時間、行動類別與備註。建議搭配「客服」一鍵新案件 + 派工看板演示，看 timeline 即時新增。" },
+      { selector: ".page-header", position: "bottom", title: "案件 360 度追蹤（demo 加值）", body: "RFP 未直接指定此頁面，但整合附錄一 三、四 兩節資料，讓評委即時觀察任一案件的完整生命週期，跨 4 個角色（客服 → 廠所 → 檢漏員 → 修漏員）。" },
+      { selector: ".app-main", position: "left", title: "左：案件清單", body: "預設列出 53 件案件，依建立時間排序。點任一案件可在右側看詳情與 timeline。" },
+      { selector: ".app-main", position: "left", title: "右上：案件資訊", body: "案件基本資料：區處、廠所、嚴重度、狀態、案件來源、負責人、GPS 座標、建立時間。" },
+      { selector: ".app-main", position: "left", title: "右下：完整 timeline", body: "每筆事件含操作人、時間、行動類別與備註。建議搭配「客服」一鍵新案件 + 派工看板演示，看 timeline 即時新增。" },
     ],
   },
 
@@ -124,11 +124,11 @@ SP.PAGE_INTROS = {
     title: "派工看板（廠所人員核心功能）",
     body: "4 欄位看板 + 一鍵派工 + 跨角色通知。",
     steps: [
-      { selector: ".page-header", position: "bottom", rfp: "附錄一 四(四)", title: "派工看板總覽", body: "本頁是廠所人員的核心入口。4 個狀態欄位即時呈現本廠所案件分佈。" },
-      { selector: ".app-main", position: "left", rfp: "四(四)1", title: "申報欄位（最左）", body: "新建未派工案件落在此。卡片下方有「派檢漏員」按鈕，點一下自動派工 + 寫派工紀錄 + 推通知給檢漏員。" },
-      { selector: ".app-main", position: "left", rfp: "四(四)3", title: "派工 / 待修 / 修復中", body: "案件流轉：派工 → 檢漏員上傳 → 待修 → 廠所派修漏員 → 修復中。待修欄位卡片有「派修漏員」按鈕。" },
-      { selector: ".app-main", position: "left", rfp: "四(四)5", title: "一鍵派工原理", body: "系統自動帶最近檢漏員 / 修漏員（demo 為清單第一個）+ 寫 dispatch 紀錄 + 推通知 + 寫稽核日誌 + 案件 status 更新，全程一個按鈕。" },
-      { selector: ".app-main", position: "left", rfp: "四(四)", title: "本區處團隊", body: "下方列出本區處可派的檢漏員與修漏員清單。實際導入後可整合 AD 群組與班表，依負載自動分派。" },
+      { selector: ".page-header", position: "bottom", rfp: "附錄一 四(四)", title: "派工看板總覽", body: "本頁是廠所人員的核心入口，整合「四(四) 派工管理」的視覺化呈現。4 個狀態欄位即時呈現本廠所案件分佈。" },
+      { selector: ".app-main", position: "left", rfp: "四(四)1", title: "申報欄位（最左）", body: "對應 RFP「四(四)1 填寫派工資料」— 從這裡點「派檢漏員」進入填寫派工資料流程，本系統用一鍵化簡化。" },
+      { selector: ".app-main", position: "left", title: "派工 / 待修 / 修復中", body: "案件流轉：派工 → 檢漏員上傳 → 待修 → 廠所派修漏員 → 修復中。待修欄位卡片有「派修漏員」按鈕。狀態流轉為業務邏輯，非單一 RFP 條目。" },
+      { selector: ".app-main", position: "left", rfp: "四(四)5", title: "一鍵派工原理", body: "對應 RFP「四(四)5 大量案件派工（空間圈選）」的簡化 — 一鍵自動帶最近檢漏員 / 修漏員 + 寫 dispatch + 推通知 + 寫稽核日誌 + 案件 status 更新。" },
+      { selector: ".app-main", position: "left", title: "本區處團隊", body: "下方列出本區處可派的檢漏員與修漏員清單。實際導入後可整合 AD 群組與班表自動分派（屬擴充功能）。" },
     ],
   },
   "/repair/dispatch": {
@@ -196,12 +196,12 @@ SP.PAGE_INTROS = {
     title: "PCCES 預算書精靈（5 步驟）",
     body: "工程預算書編製引導程序。",
     steps: [
-      { selector: ".page-header", position: "bottom", rfp: "附錄一 四(八)3", title: "PCCES 精靈總覽", body: "工程細目編碼 PCCES XML 4.3 編製作業。RFP 要求編碼正確率 ≥ 40%。" },
-      { selector: ".app-main", position: "left", rfp: "四(八)3", title: "頂部 5 步驟條", body: "整個流程分 5 個步驟：1.選案件 2.系統建議工項 3.編碼正確率檢核 4.XML 預覽 5.上傳工程會。" },
-      { selector: ".app-main", position: "left", rfp: "四(八)1", title: "步驟 1：選擇案件", body: "從已完成檢漏 / 修漏的案件中選一個編製預算書。系統會帶入案件基本資料。" },
-      { selector: ".app-main", position: "left", rfp: "四(八)2", title: "步驟 2：系統建議工項", body: "依案件性質自動推薦工項，含 PCCES 8 碼編碼、單位、單價。數量可即時調整，小計自動重算。" },
-      { selector: ".app-main", position: "left", rfp: "四(八)3", title: "步驟 3：編碼正確率檢核", body: "本系統自動檢核 PCCES 編碼正確率，本範例為 83%（≥ 40% 門檻 ✓）。下方列出所有檢核項目。" },
-      { selector: ".app-main", position: "left", rfp: "四(八)7", title: "步驟 4-5：XML + 上傳", body: "預覽完整 PCCES 4.3 XML 格式（可下載 ODS / XML），最後一鍵上傳工程會 PCCES 平台。" },
+      { selector: ".page-header", position: "bottom", rfp: "附錄一 四(八)", title: "PCCES 精靈總覽", body: "工程預算書編製整體流程（對應 RFP 四(八) 全節）。RFP 四(八)3 要求 PCCES XML 4.3 編碼正確率 ≥ 40%。" },
+      { selector: ".app-main", position: "left", rfp: "四(八)", title: "頂部 5 步驟條", body: "本系統將 RFP 四(八)1~9 的編製、發包、訂約等作業整合為 5 個演示步驟。" },
+      { selector: ".app-main", position: "left", title: "步驟 1：選擇案件", body: "從已完成檢漏 / 修漏的案件中選一個編製預算書。系統會帶入案件基本資料（此步為流程設計，非 RFP 條文）。" },
+      { selector: ".app-main", position: "left", rfp: "四(八)2", title: "步驟 2：系統建議工項", body: "對應 RFP「四(八)2 總處預算書範本施工項目檢討」— 依範本自動推薦工項，含 PCCES 8 碼編碼、單位、單價。" },
+      { selector: ".app-main", position: "left", rfp: "四(八)3", title: "步驟 3：編碼正確率檢核", body: "對應 RFP「四(八)3」— 凡超過一千萬修漏工程匯出 PCCES XML 4.3，工程預算書之細目編碼正確率至少 40%。本範例為 83% ✓" },
+      { selector: ".app-main", position: "left", rfp: "四(八)7", title: "步驟 4-5：XML + 上傳", body: "對應 RFP「四(八)7 發包作業」— 匯出 ods + PCCES XML 4.3 版最新版本格式，上傳至工程會網站。" },
     ],
   },
   "/pcces/items": {
@@ -242,10 +242,10 @@ SP.PAGE_INTROS = {
     title: "介接架構圖",
     body: "14 系統節點關聯。",
     steps: [
-      { selector: ".page-header", position: "bottom", rfp: "D03", title: "介接架構圖總覽", body: "D3 SVG 繪製 14 個外部介接系統的 topology 關聯。中央為本系統「檢修漏管理系統」，外圍 14 系統呈放射狀。" },
-      { selector: ".app-main", position: "left", rfp: "附錄一 四(九)~(十五)", title: "節點識別", body: "外圍節點為：CIS / GIS / SCADA / AMI / ERP / 1999 / EIP / AD / PCCES / PMIS / DM / BI / 氣象局 / Open Data。每節點下方標示協定（REST / WMTS / OPC-UA / MQTT / SOAP / OIDC / LDAP / ODBC 等）。" },
-      { selector: ".app-main", position: "left", rfp: "D03", title: "顏色編碼", body: "白色 = 正常、橘色 = 降級、紅色 = 離線。連線顏色同步反映該系統健康度。" },
-      { selector: ".page-header", position: "bottom", rfp: "附錄一 四(九)", title: "點節點查細節", body: "未來版本：點任一節點可看該系統的健康度歷史、延遲分布、最近錯誤 log、SLA 達成率。目前可從上方「14 系統清單」/「健康度監控」查詢。" },
+      { selector: ".page-header", position: "bottom", title: "介接架構圖總覽（demo 加值）", body: "RFP 未直接要求架構圖，但對應「附錄一 四(九)~(十五) 介接系統」整體呈現。以 D3 SVG 繪製本系統與外部介接系統的關聯。" },
+      { selector: ".app-main", position: "left", rfp: "四(九)~(十五)", title: "RFP 明列 7 大介接點", body: "對應 RFP 四(九) 抄表系統、四(十) 客服系統、四(十一) 材料物料、四(十二) 新北 / 基隆消防局、四(十三) 停水公告、四(十四) 營運管理、四(十五) 分區計量管理。本系統 mock 額外加 AD / GIS / PCCES / 薪資 / 財產等延伸介接點，便於演示。" },
+      { selector: ".app-main", position: "left", title: "顏色編碼", body: "白色 = 正常、橘色 = 降級、紅色 = 離線。連線顏色同步反映該系統健康度（demo 加值視覺化）。" },
+      { selector: ".page-header", position: "bottom", title: "點節點查細節（規劃中）", body: "未來版本：點任一節點可看該系統的健康度歷史、延遲分布、最近錯誤紀錄。目前可從上方「14 系統清單」/「健康度監控」查詢。" },
     ],
   },
   "/integration/wmts": {
@@ -277,11 +277,11 @@ SP.PAGE_INTROS = {
     title: "檢漏員行動版",
     body: "外業檢漏員手機 App，5 個分頁真實可操作。",
     steps: [
-      { selector: ".page-header", position: "bottom", rfp: "附錄一 二(二)", title: "檢漏員行動版總覽", body: "POC 用 React 元件模擬 React Native 風格手機介面。PhoneFrame 內每個按鈕都可真實點擊。" },
-      { selector: ".app-main", position: "left", rfp: "二(二)1", title: "今日任務（首頁）", body: "依距離排序的待處理案件。每張卡有「導航」（連 Google Maps）+「開始處理」兩個按鈕。緊急案件以紅色嚴重度條標示。" },
-      { selector: ".app-main", position: "left", rfp: "二(二)2", title: "案件詳情 + GPS", body: "點「開始處理」進入案件詳情。系統自動定位 WGS84 (24.5500°N, 120.6500°E) + TWD97 (X=215000, Y=2715500) 雙坐標。" },
-      { selector: ".app-main", position: "left", rfp: "二(二)3", title: "拍照 + 一鍵上傳", body: "「拍照」按鈕自動嵌入 GPS EXIF。最多 9 張照片。「一鍵送出」自動 dispatch SUBMIT_INSPECTION → 案件 status=待修 → 推通知給廠所 → 寫稽核日誌。" },
-      { selector: ".app-main", position: "left", rfp: "二(二)5", title: "底部 5 Tab", body: "案件 / 地圖 / 拍照 / 日報 / 設定。地圖頁顯示我的任務 GIS 分佈，日報頁可一鍵產生今日工作日報。" },
+      { selector: ".page-header", position: "bottom", rfp: "附錄一 二(二)", title: "檢漏員行動版總覽", body: "POC 用 React 元件模擬手機介面。PhoneFrame 內每個按鈕都可真實點擊。對應 RFP「二、行動版系統需求 / (二) 檢漏作業功能」全節。" },
+      { selector: ".app-main", position: "left", rfp: "二(二)1", title: "今日任務（首頁）", body: "對應 RFP「二(二)1 案件處理單」— 記錄檢漏案件的系統工作區、檢漏地理位置、管徑、案件來源、漏水情形等。本系統以任務列表呈現。" },
+      { selector: ".app-main", position: "left", rfp: "二(二)2", title: "案件詳情 + GPS", body: "對應 RFP「二(二)2 檢漏案件定位」— 線上 GIS 案件線上定位，輔以行動裝置 GPS 設備，儲存 WGS84 + TWD97 雙坐標。" },
+      { selector: ".app-main", position: "left", rfp: "二(二)3", title: "拍照 + 一鍵上傳", body: "對應 RFP「二(二)3 現場位置圖上傳」+「二(二)4 建置案件確認單」— 上傳現場位置圖照片並成立確認單。本系統用一鍵送出觸發跨角色連動（status 流轉 + 通知廠所 + 寫稽核日誌）。" },
+      { selector: ".app-main", position: "left", rfp: "二(二)5~7", title: "底部 5 Tab", body: "案件 / 地圖（二(二)6 管線圖資查詢）/ 拍照 / 日報（二(二)5 工作日報表）/ 設定（二(二)7 系統帳號權限設定）。" },
     ],
   },
   "/mobile/repairer": {
@@ -419,14 +419,14 @@ SP.PAGE_INTROS = {
     title: "教育訓練（8 場 / 264 人次）",
     body: "涵蓋 9 類角色：系統管理員、區處主管、廠所人員、檢漏員、修漏員、客服、DBA、資安、稽核員。",
     tips: [
-      "對應 RFP 附錄四 教育訓練需求",
+      "對應 RFP 伍、四 教育訓練需求",
     ],
   },
   "/project/penalty": {
     title: "罰則對照表",
-    body: "依 RFP 附錄捌：一般違反 0.1%/日、合計 ≥20% 終止契約、惡意程式 5%、資安改善逾期等。",
+    body: "依 RFP 捌 罰則：一般違反 0.1%/日、合計 ≥20% 終止契約、惡意程式 5%、資安改善逾期等。",
     tips: [
-      "對應 RFP 附錄捌",
+      "對應 RFP 捌 罰則",
     ],
   },
   "/project/documents": {
