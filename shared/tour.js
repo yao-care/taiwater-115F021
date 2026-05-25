@@ -1,103 +1,253 @@
 /* ============================================================
-   shared/tour.js — 操作導覽引擎
-   spotlight 反白 + 提示框 + 步驟切換 + localStorage 記錄完成
+   shared/tour.js — 頁面說明氣泡（每進一個功能自動跳）
+   每頁 localStorage 獨立記錄是否看過
+   Header ❓ 按鈕可一鍵重置（讓所有頁面說明重新自動跳）
    ============================================================ */
 
 window.SP = window.SP || {};
 
-SP.TOUR_DONE_KEY = "shuili_poc_tour_done_v1";
+SP.INTRO_STORE_KEY = "shuili_poc_intro_done_v1";
 
-/* ---------- TourContext + Provider ---------- */
-SP.TourContext = React.createContext(null);
+/* ---------- localStorage helpers ---------- */
+SP.getIntroDoneMap = function () {
+  try { return JSON.parse(localStorage.getItem(SP.INTRO_STORE_KEY) || "{}"); }
+  catch (e) { return {}; }
+};
 
-SP.TourProvider = function TourProvider({ children, steps }) {
-  const [active, setActive] = React.useState(false);
-  const [stepIndex, setStepIndex] = React.useState(0);
+SP.markIntroDone = function (id) {
+  const m = SP.getIntroDoneMap();
+  m[id] = true;
+  try { localStorage.setItem(SP.INTRO_STORE_KEY, JSON.stringify(m)); }
+  catch (e) {}
+};
 
-  const start = React.useCallback((fromStep = 0) => {
-    setStepIndex(fromStep);
-    setActive(true);
-  }, []);
+SP.resetAllIntros = function () {
+  try { localStorage.removeItem(SP.INTRO_STORE_KEY); }
+  catch (e) {}
+};
 
-  const stop = React.useCallback(() => {
-    setActive(false);
-    try { localStorage.setItem(SP.TOUR_DONE_KEY, "1"); } catch (e) {}
-  }, []);
+SP.isIntroDone = function (id) {
+  return !!SP.getIntroDoneMap()[id];
+};
 
-  const next = React.useCallback(() => {
-    setStepIndex(i => Math.min(i + 1, steps.length - 1));
-  }, [steps.length]);
+/* ---------- 從 path 找對應 intro（含前綴匹配） ---------- */
+SP.getIntroForPath = function (pathname) {
+  if (!SP.PAGE_INTROS) return null;
+  // 完全匹配優先
+  if (SP.PAGE_INTROS[pathname]) {
+    return { id: pathname, ...SP.PAGE_INTROS[pathname] };
+  }
+  // 前綴匹配（從長到短）
+  const segs = pathname.split("/").filter(Boolean);
+  while (segs.length > 0) {
+    const partial = "/" + segs.join("/");
+    if (SP.PAGE_INTROS[partial]) return { id: partial, ...SP.PAGE_INTROS[partial] };
+    segs.pop();
+  }
+  if (SP.PAGE_INTROS["/"]) return { id: "/", ...SP.PAGE_INTROS["/"] };
+  return null;
+};
 
-  const prev = React.useCallback(() => {
-    setStepIndex(i => Math.max(i - 1, 0));
-  }, []);
-
-  const value = React.useMemo(() => ({
-    active, stepIndex, steps, start, stop, next, prev,
-    isDone: () => {
-      try { return localStorage.getItem(SP.TOUR_DONE_KEY) === "1"; } catch (e) { return false; }
-    },
-  }), [active, stepIndex, steps, start, stop, next, prev]);
-
-  return React.createElement(
-    SP.TourContext.Provider,
-    { value },
-    children,
-    active ? React.createElement(SP.TourOverlay) : null
+/* ---------- PageIntroBubble — 右下角氣泡 ---------- */
+SP.PageIntroBubble = function PageIntroBubble({ intro, onClose, onNeverShow }) {
+  return (
+    <div style={bubbleStyle} role="dialog" aria-label="本頁說明">
+      <div style={bubbleHeaderStyle}>
+        <span style={{
+          fontSize: "var(--text-xs)",
+          fontWeight: 700,
+          color: "var(--tw-primary)",
+          letterSpacing: "0.04em",
+        }}>ℹ️ 本頁說明</span>
+        <button
+          onClick={onClose}
+          style={closeBtnStyle}
+          aria-label="關閉"
+          title="關閉（下次進入此頁仍會自動顯示）"
+        >×</button>
+      </div>
+      <div style={{
+        fontSize: "var(--text-base)",
+        fontWeight: 700,
+        marginBottom: "var(--space-2)",
+        color: "var(--text-primary)",
+      }}>{intro.title}</div>
+      <div style={{
+        fontSize: "var(--text-sm)",
+        lineHeight: 1.7,
+        color: "var(--text-secondary)",
+      }}>{intro.body}</div>
+      {intro.tips && intro.tips.length > 0 && (
+        <ul style={{
+          marginTop: "var(--space-3)",
+          paddingLeft: "1.25rem",
+          fontSize: "var(--text-sm)",
+          lineHeight: 1.7,
+          color: "var(--text-secondary)",
+        }}>
+          {intro.tips.map((t, i) => <li key={i}>{t}</li>)}
+        </ul>
+      )}
+      <div style={{
+        marginTop: "var(--space-4)",
+        display: "flex",
+        gap: "var(--space-2)",
+        justifyContent: "flex-end",
+      }}>
+        <button onClick={onNeverShow} style={ghostBtnStyle}>不再顯示</button>
+        <button onClick={onClose} style={primaryBtnStyle}>了解了</button>
+      </div>
+    </div>
   );
 };
 
-SP.useTour = function () {
-  const ctx = React.useContext(SP.TourContext);
-  if (!ctx) throw new Error("useTour 必須在 TourProvider 內使用");
-  return ctx;
+const bubbleStyle = {
+  position: "fixed",
+  bottom: "var(--space-5)",
+  right: "var(--space-5)",
+  width: "22rem",
+  maxWidth: "calc(100vw - 2rem)",
+  background: "var(--bg-surface)",
+  border: "1px solid var(--border-strong)",
+  borderRadius: "var(--radius-lg)",
+  boxShadow: "var(--shadow-lg)",
+  padding: "var(--space-5)",
+  zIndex: 80,
+  animation: "intro-pop-in 250ms ease-out",
 };
 
-/* ---------- WelcomeWrapper — 首次進入自動偵測 + 跳歡迎對話框 ---------- */
-SP.WelcomeWrapper = function WelcomeWrapper() {
-  const tour = SP.useTour();
-  const [showWelcome, setShowWelcome] = React.useState(false);
+const bubbleHeaderStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  marginBottom: "var(--space-3)",
+};
 
-  // mount 時偵測是否首次
+const closeBtnStyle = {
+  background: "none",
+  border: 0,
+  fontSize: "var(--text-xl)",
+  cursor: "pointer",
+  color: "var(--text-muted)",
+  padding: "0 var(--space-2)",
+  lineHeight: 1,
+};
+
+const ghostBtnStyle = {
+  background: "transparent",
+  border: "1px solid var(--border-strong)",
+  borderRadius: "var(--radius-md)",
+  padding: "var(--space-2) var(--space-3)",
+  fontSize: "var(--text-sm)",
+  cursor: "pointer",
+  color: "var(--text-secondary)",
+};
+
+const primaryBtnStyle = {
+  background: "var(--tw-primary)",
+  border: 0,
+  borderRadius: "var(--radius-md)",
+  padding: "var(--space-2) var(--space-4)",
+  fontSize: "var(--text-sm)",
+  fontWeight: 600,
+  cursor: "pointer",
+  color: "var(--text-inverse)",
+};
+
+/* keyframe 加到 layout.css 內，這裡用 style tag 兜底 */
+if (typeof document !== "undefined" && !document.getElementById("intro-anim-style")) {
+  const styleEl = document.createElement("style");
+  styleEl.id = "intro-anim-style";
+  styleEl.textContent =
+    "@keyframes intro-pop-in { from { transform: translateY(1rem) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }";
+  document.head.appendChild(styleEl);
+}
+
+/* ---------- usePageIntro hook — 每個 PageHeader 內呼叫 ---------- */
+SP.usePageIntro = function () {
+  const location = ReactRouterDOM.useLocation();
+  const intro = SP.getIntroForPath(location.pathname);
+  const [open, setOpen] = React.useState(false);
+  const [forceTick, setForceTick] = React.useState(0);
+
   React.useEffect(() => {
-    if (!tour.isDone()) {
-      // 等 1 秒讓 layout 渲染完
-      const t = setTimeout(() => setShowWelcome(true), 800);
+    if (!intro) { setOpen(false); return; }
+    if (SP.isIntroDone(intro.id) && forceTick === 0) {
+      setOpen(false);
+      return;
+    }
+    // 首次進入該頁 → 600ms 後跳氣泡
+    const t = setTimeout(() => setOpen(true), 600);
+    return () => clearTimeout(t);
+  }, [intro && intro.id, forceTick]);
+
+  const close = React.useCallback(() => setOpen(false), []);
+  const neverShow = React.useCallback(() => {
+    if (intro) SP.markIntroDone(intro.id);
+    setOpen(false);
+  }, [intro && intro.id]);
+  const manualOpen = React.useCallback(() => {
+    setForceTick(t => t + 1);
+    setOpen(true);
+  }, []);
+
+  return { intro, open, close, neverShow, manualOpen };
+};
+
+/* ---------- IntroIconButton — PageHeader 旁邊的 ℹ️ 按鈕 ---------- */
+SP.IntroIconButton = function IntroIconButton({ onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      title="本頁說明"
+      style={{
+        background: "var(--bg-muted)",
+        border: "1px solid var(--border-base)",
+        borderRadius: "999px",
+        width: "2rem",
+        height: "2rem",
+        fontSize: "1rem",
+        cursor: "pointer",
+        marginLeft: "var(--space-2)",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >ℹ️</button>
+  );
+};
+
+/* ---------- WelcomeModal — 首次進站歡迎（簡化版） ---------- */
+SP.WelcomeWrapper = function WelcomeWrapper() {
+  const [show, setShow] = React.useState(false);
+  React.useEffect(() => {
+    if (!SP.isIntroDone("__welcome__")) {
+      const t = setTimeout(() => setShow(true), 700);
       return () => clearTimeout(t);
     }
   }, []);
-
-  if (!showWelcome) return null;
-  return React.createElement(SP.WelcomeModal, {
-    onStart: () => { setShowWelcome(false); tour.start(0); },
-    onSkip:  () => {
-      setShowWelcome(false);
-      try { localStorage.setItem(SP.TOUR_DONE_KEY, "1"); } catch (e) {}
-    },
-  });
-};
-
-/* ---------- WelcomeModal — 首次進站歡迎對話框 ---------- */
-SP.WelcomeModal = function WelcomeModal({ onStart, onSkip }) {
+  const close = () => {
+    SP.markIntroDone("__welcome__");
+    setShow(false);
+  };
+  if (!show) return null;
   return (
     <div style={welcomeBackdropStyle}>
       <div style={welcomeBoxStyle}>
         <div style={{ fontSize: "3rem", marginBottom: "var(--space-3)" }}>💧</div>
         <h2 style={{ margin: 0, fontSize: "var(--text-xl)", fontWeight: 700 }}>歡迎使用 台水檢修漏管理資訊系統</h2>
         <div className="text-sm muted" style={{ marginTop: "var(--space-2)" }}>公開徵求 POC ・ 藥提醒科技</div>
-
         <p style={{ marginTop: "var(--space-5)", fontSize: "var(--text-base)", lineHeight: 1.7 }}>
-          本系統包含 <strong>11 個角色</strong>、<strong>10 個子系統</strong>、<strong>126 個操作葉子</strong>。
-          <br />要不要先看 60 秒導覽，認識核心功能與跨角色流程？
+          每進入一個新功能時，<br />
+          右下角會跳出該頁面的<strong>使用說明</strong>。
+          <br /><br />
+          已看過的頁面不再自動跳出，可隨時點頁面標題旁的 <strong>ℹ️</strong> 按鈕重新查閱。
         </p>
-
-        <div style={{ display: "flex", gap: "var(--space-3)", marginTop: "var(--space-5)", justifyContent: "center" }}>
-          <SP.Button variant="secondary" size="lg" onClick={onSkip}>略過，自行探索</SP.Button>
-          <SP.Button variant="primary" size="lg" onClick={onStart}>開始 60 秒導覽 →</SP.Button>
+        <div style={{ marginTop: "var(--space-5)" }}>
+          <button onClick={close} style={{ ...primaryBtnStyle, padding: "var(--space-3) var(--space-6)", fontSize: "var(--text-base)" }}>了解，開始探索 →</button>
         </div>
-
         <div className="text-xs muted" style={{ marginTop: "var(--space-4)" }}>
-          隨時可從右上「❓ 教學」重新開啟導覽
+          想重新看所有頁面說明？點 Header 上「❓ 重置教學」
         </div>
       </div>
     </div>
@@ -119,215 +269,29 @@ const welcomeBoxStyle = {
   background: "var(--bg-surface)",
   borderRadius: "var(--radius-lg)",
   padding: "var(--space-8)",
-  maxWidth: "32rem",
+  maxWidth: "30rem",
   width: "100%",
   textAlign: "center",
   boxShadow: "var(--shadow-lg)",
 };
 
-/* ---------- TourOverlay — 主導覽遮罩 + 提示框 ---------- */
-SP.TourOverlay = function TourOverlay() {
-  const { stepIndex, steps, stop, next, prev } = SP.useTour();
+/* ---------- TourHelpButton（Header 內的 ❓ 按鈕：重置） ---------- */
+SP.TourHelpButton = function TourHelpButton() {
   const navigate = ReactRouterDOM.useNavigate();
-  const { state, dispatch } = SP.useStore();
-  const [rect, setRect] = React.useState(null);
-  const [viewport, setViewport] = React.useState({ w: window.innerWidth, h: window.innerHeight });
-
-  const step = steps[stepIndex];
-
-  // 進入 step 時：執行 navigate / switchRole / scroll
-  React.useEffect(() => {
-    if (!step) return;
-    if (step.switchRole) {
-      const u = state.users.find(x => x.id === step.switchRole);
-      if (u) dispatch({ type: "SWITCH_ROLE", payload: u });
-    }
-    if (step.navigate) {
-      navigate(step.navigate);
-    }
-  }, [stepIndex]);
-
-  // 計算 target rect（給 500ms 讓 navigate 完成 render）
-  React.useEffect(() => {
-    if (!step) return;
-    let raf;
-    const measure = () => {
-      if (!step.selector || step.selector === "body") { setRect(null); return; }
-      const el = document.querySelector(step.selector);
-      if (el) {
-        const r = el.getBoundingClientRect();
-        setRect({ x: r.left, y: r.top, w: r.width, h: r.height });
-        el.scrollIntoView({ block: "center", behavior: "smooth" });
-      } else {
-        setRect(null);
-      }
-    };
-    // navigate 後 DOM 需時間 mount，多次重試
-    const timers = [50, 200, 500, 900].map(t => setTimeout(measure, t));
-    const onResize = () => {
-      setViewport({ w: window.innerWidth, h: window.innerHeight });
-      measure();
-    };
-    window.addEventListener("resize", onResize);
-    return () => {
-      timers.forEach(clearTimeout);
-      window.removeEventListener("resize", onResize);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [stepIndex]);
-
-  if (!step) return null;
-
-  const total = steps.length;
-  const isLast = stepIndex === total - 1;
-  const isFirst = stepIndex === 0;
-
-  // 提示框位置計算
-  const tooltipPos = computeTooltipPosition(rect, step.position, viewport);
-
   return (
-    <div style={tourOverlayStyle}>
-      {/* SVG mask 反白 spotlight */}
-      <svg style={tourSvgStyle} width={viewport.w} height={viewport.h}>
-        <defs>
-          <mask id="tour-mask">
-            <rect x="0" y="0" width="100%" height="100%" fill="white" />
-            {rect && (
-              <rect
-                x={rect.x - 8} y={rect.y - 8}
-                width={rect.w + 16} height={rect.h + 16}
-                rx={8} ry={8}
-                fill="black"
-              />
-            )}
-          </mask>
-        </defs>
-        <rect x="0" y="0" width="100%" height="100%" fill="oklch(0.15 0.02 250 / 0.65)" mask="url(#tour-mask)" />
-        {rect && (
-          <rect
-            x={rect.x - 8} y={rect.y - 8}
-            width={rect.w + 16} height={rect.h + 16}
-            rx={8} ry={8}
-            fill="none"
-            stroke="oklch(0.6 0.18 60)"
-            strokeWidth="3"
-            strokeDasharray="6 4"
-          />
-        )}
-      </svg>
-
-      {/* 提示框 */}
-      <div style={{ ...tourTooltipStyle, ...tooltipPos }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-2)" }}>
-          <span className="badge badge--info">第 {stepIndex + 1} / {total} 步</span>
-          <button onClick={stop} style={tourCloseBtnStyle} title="略過全部">×</button>
-        </div>
-
-        <div style={{ fontSize: "var(--text-lg)", fontWeight: 700, marginBottom: "var(--space-2)" }}>{step.title}</div>
-        <div style={{ fontSize: "var(--text-sm)", lineHeight: 1.7, color: "var(--text-secondary)" }}>{step.body}</div>
-
-        <div style={{ marginTop: "var(--space-4)", display: "flex", gap: "var(--space-2)", justifyContent: "space-between" }}>
-          <SP.Button variant="ghost" size="sm" onClick={stop}>略過全部</SP.Button>
-          <span style={{ display: "inline-flex", gap: "var(--space-2)" }}>
-            {!isFirst && <SP.Button variant="secondary" size="sm" onClick={prev}>← 上一步</SP.Button>}
-            {!isLast ? (
-              <SP.Button variant="primary" size="sm" onClick={next}>下一步 →</SP.Button>
-            ) : (
-              <SP.Button variant="primary" size="sm" onClick={stop}>完成 ✓</SP.Button>
-            )}
-          </span>
-        </div>
-
-        {/* 進度條 */}
-        <div style={{ marginTop: "var(--space-3)", height: "3px", background: "var(--bg-muted)", borderRadius: "2px", overflow: "hidden" }}>
-          <div style={{ width: ((stepIndex + 1) / total * 100) + "%", height: "100%", background: "var(--tw-primary)", transition: "width 200ms" }} />
-        </div>
-      </div>
-    </div>
+    <button
+      className="app-header__action"
+      onClick={() => {
+        if (window.confirm("重新顯示所有頁面說明？（會清除「已看過」的記錄，下次進入每頁仍會自動跳出說明氣泡）")) {
+          SP.resetAllIntros();
+          navigate("/");
+          window.location.reload();
+        }
+      }}
+      title="重置所有頁面說明"
+      data-tour="help"
+    >
+      ❓ 重置教學
+    </button>
   );
 };
-
-const tourOverlayStyle = {
-  position: "fixed",
-  inset: 0,
-  zIndex: 90,
-  pointerEvents: "auto",
-};
-
-const tourSvgStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  pointerEvents: "none",
-};
-
-const tourTooltipStyle = {
-  position: "fixed",
-  background: "var(--bg-surface)",
-  border: "1px solid var(--border-strong)",
-  borderRadius: "var(--radius-lg)",
-  boxShadow: "var(--shadow-lg)",
-  padding: "var(--space-5)",
-  width: "22rem",
-  maxWidth: "calc(100vw - 2rem)",
-  zIndex: 95,
-};
-
-const tourCloseBtnStyle = {
-  background: "none",
-  border: 0,
-  fontSize: "var(--text-xl)",
-  cursor: "pointer",
-  color: "var(--text-muted)",
-  padding: "0 var(--space-2)",
-};
-
-/* ---------- 計算提示框位置 ---------- */
-function computeTooltipPosition(rect, position, viewport) {
-  const tipW = 352;     // 22rem ~= 352px
-  const tipH = 220;     // 估計高度
-  const margin = 16;
-
-  // 沒 target → 螢幕中央
-  if (!rect) {
-    return {
-      top: Math.max(margin, (viewport.h - tipH) / 2) + "px",
-      left: Math.max(margin, (viewport.w - tipW) / 2) + "px",
-    };
-  }
-
-  const cx = rect.x + rect.w / 2;
-  const cy = rect.y + rect.h / 2;
-
-  let top, left;
-
-  switch (position) {
-    case "bottom":
-      top = rect.y + rect.h + margin;
-      left = Math.min(viewport.w - tipW - margin, Math.max(margin, cx - tipW / 2));
-      break;
-    case "top":
-      top = rect.y - tipH - margin;
-      left = Math.min(viewport.w - tipW - margin, Math.max(margin, cx - tipW / 2));
-      break;
-    case "left":
-      top = Math.min(viewport.h - tipH - margin, Math.max(margin, cy - tipH / 2));
-      left = rect.x - tipW - margin;
-      break;
-    case "right":
-    default:
-      top = Math.min(viewport.h - tipH - margin, Math.max(margin, cy - tipH / 2));
-      left = rect.x + rect.w + margin;
-      break;
-  }
-
-  // 邊界保護
-  if (top < margin) top = margin;
-  if (top + tipH > viewport.h - margin) top = viewport.h - tipH - margin;
-  if (left < margin) left = margin;
-  if (left + tipW > viewport.w - margin) left = viewport.w - tipW - margin;
-
-  return { top: top + "px", left: left + "px" };
-}

@@ -232,21 +232,7 @@ SP.AppHeader = function AppHeader() {
   );
 };
 
-/* ---------- TourHelpButton（連到 SP.TourContext） ---------- */
-SP.TourHelpButton = function TourHelpButton() {
-  const ctx = React.useContext(SP.TourContext);
-  if (!ctx) return null;
-  return (
-    <button
-      className="app-header__action"
-      onClick={() => ctx.start(0)}
-      title="重新開始操作教學"
-      data-tour="help"
-    >
-      ❓ 教學
-    </button>
-  );
-};
+/* TourHelpButton 已在 shared/tour.js 定義（重置所有頁面說明） */
 
 const dropdownStyle = {
   position: "absolute",

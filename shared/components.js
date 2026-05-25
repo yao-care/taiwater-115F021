@@ -148,8 +148,10 @@ SP.ToastStack = function ToastStack() {
   );
 };
 
-/* ---------- PageHeader（標題 + 麵包屑 + RFP 追溯 + 按鈕） ---------- */
+/* ---------- PageHeader（標題 + 麵包屑 + RFP 追溯 + 按鈕 + ℹ️ 本頁說明） ---------- */
 SP.PageHeader = function PageHeader({ title, subtitle, breadcrumb, rfp, actions }) {
+  // 從 URL 自動查 PAGE_INTROS 抓本頁說明
+  const introState = (typeof SP.usePageIntro === "function") ? SP.usePageIntro() : { intro: null };
   return (
     <div className="page-header">
       {breadcrumb && (
@@ -163,9 +165,21 @@ SP.PageHeader = function PageHeader({ title, subtitle, breadcrumb, rfp, actions 
           {rfp && <span className="page-header__rfp">RFP {rfp}</span>}
         </div>
       )}
-      <h1 className="page-header__title">{title}</h1>
+      <h1 className="page-header__title" style={{ display: "inline-flex", alignItems: "center" }}>
+        <span>{title}</span>
+        {introState.intro && (
+          <SP.IntroIconButton onClick={introState.manualOpen} />
+        )}
+      </h1>
       {subtitle && <p className="page-header__subtitle">{subtitle}</p>}
       {actions && <div className="page-header__actions">{actions}</div>}
+      {introState.intro && introState.open && (
+        <SP.PageIntroBubble
+          intro={introState.intro}
+          onClose={introState.close}
+          onNeverShow={introState.neverShow}
+        />
+      )}
     </div>
   );
 };
