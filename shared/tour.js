@@ -176,23 +176,170 @@ SP.usePageIntro = function () {
       setOpen(false);
       return;
     }
-    // 首次進入該頁 → 600ms 後跳氣泡
+    // 首次進入該頁 → 600ms 後跳教學
     const t = setTimeout(() => setOpen(true), 600);
     return () => clearTimeout(t);
   }, [intro && intro.id, forceTick]);
 
-  const close = React.useCallback(() => setOpen(false), []);
-  const neverShow = React.useCallback(() => {
+  const close = React.useCallback(() => {
     if (intro) SP.markIntroDone(intro.id);
     setOpen(false);
   }, [intro && intro.id]);
+  const neverShow = close;
   const manualOpen = React.useCallback(() => {
     setForceTick(t => t + 1);
     setOpen(true);
   }, []);
 
-  return { intro, open, close, neverShow, manualOpen };
+  // 有 steps 且不只 1 步 → 多步 spotlight；否則 → 右下氣泡
+  const mode = (intro && Array.isArray(intro.steps) && intro.steps.length > 1)
+    ? "steps"
+    : "bubble";
+
+  return { intro, open, close, neverShow, manualOpen, mode };
 };
+
+/* ---------- PageTourOverlay — 多步 spotlight 教學 ---------- */
+SP.PageTourOverlay = function PageTourOverlay({ steps, onClose }) {
+  const [idx, setIdx] = React.useState(0);
+  const [rect, setRect] = React.useState(null);
+  const [viewport, setViewport] = React.useState({ w: window.innerWidth, h: window.innerHeight });
+
+  const step = steps[idx];
+  const total = steps.length;
+
+  React.useEffect(() => {
+    if (!step) return;
+    const measure = () => {
+      if (!step.selector) { setRect(null); return; }
+      const el = document.querySelector(step.selector);
+      if (el) {
+        const r = el.getBoundingClientRect();
+        setRect({ x: r.left, y: r.top, w: r.width, h: r.height });
+        el.scrollIntoView({ block: "center", behavior: "smooth" });
+      } else {
+        setRect(null);
+      }
+    };
+    const timers = [50, 200, 500].map(t => setTimeout(measure, t));
+    const onResize = () => {
+      setViewport({ w: window.innerWidth, h: window.innerHeight });
+      measure();
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      timers.forEach(clearTimeout);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [idx]);
+
+  if (!step) return null;
+  const isLast = idx === total - 1;
+  const isFirst = idx === 0;
+  const tooltipPos = computeTooltipPosition(rect, step.position, viewport);
+
+  return (
+    <div style={tourOverlayStyle}>
+      <svg style={tourSvgStyle} width={viewport.w} height={viewport.h}>
+        <defs>
+          <mask id="page-tour-mask">
+            <rect x="0" y="0" width="100%" height="100%" fill="white" />
+            {rect && (
+              <rect x={rect.x - 8} y={rect.y - 8} width={rect.w + 16} height={rect.h + 16} rx={8} ry={8} fill="black" />
+            )}
+          </mask>
+        </defs>
+        <rect x="0" y="0" width="100%" height="100%" fill="oklch(0.15 0.02 250 / 0.65)" mask="url(#page-tour-mask)" />
+        {rect && (
+          <rect x={rect.x - 8} y={rect.y - 8} width={rect.w + 16} height={rect.h + 16} rx={8} ry={8} fill="none" stroke="oklch(0.6 0.18 60)" strokeWidth="3" strokeDasharray="6 4" />
+        )}
+      </svg>
+
+      <div style={{ ...tourTooltipStyle, ...tooltipPos }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "var(--space-2)", gap: "var(--space-2)" }}>
+          <span className="badge badge--info">第 {idx + 1} / {total} 步</span>
+          {step.rfp && <span style={{ fontSize: "var(--text-xs)", color: "var(--color-low)", fontWeight: 600 }}>RFP {step.rfp}</span>}
+          <button onClick={onClose} style={closeBtnStyle} title="略過">×</button>
+        </div>
+        <div style={{ fontSize: "var(--text-lg)", fontWeight: 700, marginBottom: "var(--space-2)" }}>{step.title}</div>
+        <div style={{ fontSize: "var(--text-sm)", lineHeight: 1.7, color: "var(--text-secondary)" }}>{step.body}</div>
+        <div style={{ marginTop: "var(--space-4)", display: "flex", gap: "var(--space-2)", justifyContent: "space-between" }}>
+          <button onClick={onClose} style={ghostBtnStyle}>略過</button>
+          <span style={{ display: "inline-flex", gap: "var(--space-2)" }}>
+            {!isFirst && <button onClick={() => setIdx(i => i - 1)} style={ghostBtnStyle}>← 上一步</button>}
+            {!isLast
+              ? <button onClick={() => setIdx(i => i + 1)} style={primaryBtnStyle}>下一步 →</button>
+              : <button onClick={onClose} style={primaryBtnStyle}>完成 ✓</button>}
+          </span>
+        </div>
+        <div style={{ marginTop: "var(--space-3)", height: "3px", background: "var(--bg-muted)", borderRadius: "2px", overflow: "hidden" }}>
+          <div style={{ width: ((idx + 1) / total * 100) + "%", height: "100%", background: "var(--tw-primary)", transition: "width 200ms" }} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const tourOverlayStyle = {
+  position: "fixed",
+  inset: 0,
+  zIndex: 90,
+  pointerEvents: "auto",
+};
+
+const tourSvgStyle = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  pointerEvents: "none",
+};
+
+const tourTooltipStyle = {
+  position: "fixed",
+  background: "var(--bg-surface)",
+  border: "1px solid var(--border-strong)",
+  borderRadius: "var(--radius-lg)",
+  boxShadow: "var(--shadow-lg)",
+  padding: "var(--space-5)",
+  width: "22rem",
+  maxWidth: "calc(100vw - 2rem)",
+  zIndex: 95,
+};
+
+function computeTooltipPosition(rect, position, viewport) {
+  const tipW = 352, tipH = 260, margin = 16;
+  if (!rect) {
+    return { top: Math.max(margin, (viewport.h - tipH) / 2) + "px", left: Math.max(margin, (viewport.w - tipW) / 2) + "px" };
+  }
+  const cx = rect.x + rect.w / 2, cy = rect.y + rect.h / 2;
+  let top, left;
+  switch (position) {
+    case "bottom":
+      top = rect.y + rect.h + margin;
+      left = Math.min(viewport.w - tipW - margin, Math.max(margin, cx - tipW / 2));
+      break;
+    case "top":
+      top = rect.y - tipH - margin;
+      left = Math.min(viewport.w - tipW - margin, Math.max(margin, cx - tipW / 2));
+      break;
+    case "left":
+      top = Math.min(viewport.h - tipH - margin, Math.max(margin, cy - tipH / 2));
+      left = rect.x - tipW - margin;
+      break;
+    case "right":
+    default:
+      top = Math.min(viewport.h - tipH - margin, Math.max(margin, cy - tipH / 2));
+      left = rect.x + rect.w + margin;
+      break;
+  }
+  if (top < margin) top = margin;
+  if (top + tipH > viewport.h - margin) top = viewport.h - tipH - margin;
+  if (left < margin) left = margin;
+  if (left + tipW > viewport.w - margin) left = viewport.w - tipW - margin;
+  return { top: top + "px", left: left + "px" };
+}
 
 /* ---------- IntroIconButton — PageHeader 旁邊的 ℹ️ 按鈕 ---------- */
 SP.IntroIconButton = function IntroIconButton({ onClick }) {

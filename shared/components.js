@@ -174,11 +174,9 @@ SP.PageHeader = function PageHeader({ title, subtitle, breadcrumb, rfp, actions 
       {subtitle && <p className="page-header__subtitle">{subtitle}</p>}
       {actions && <div className="page-header__actions">{actions}</div>}
       {introState.intro && introState.open && (
-        <SP.PageIntroBubble
-          intro={introState.intro}
-          onClose={introState.close}
-          onNeverShow={introState.neverShow}
-        />
+        introState.mode === "steps"
+          ? <SP.PageTourOverlay steps={introState.intro.steps} onClose={introState.close} />
+          : <SP.PageIntroBubble intro={introState.intro} onClose={introState.close} onNeverShow={introState.neverShow} />
       )}
     </div>
   );
