@@ -7,8 +7,8 @@
   <meta name="description" content="台灣自來水股份有限公司 檢修漏管理資訊系統改版整合案 — 公開徵求 POC（藥提醒科技）" />
 
   <!-- ============ Design Tokens & Layout ============ -->
-  <link rel="stylesheet" href="shared/tokens.css?v=2" />
-  <link rel="stylesheet" href="shared/layout.css?v=2" />
+  <link rel="stylesheet" href="shared/tokens.css?v=3" />
+  <link rel="stylesheet" href="shared/layout.css?v=3" />
 
   <!-- ============ External CDN ============ -->
   <!-- React 18 -->
@@ -30,27 +30,29 @@
   </div>
 
   <!-- ============ Shared（依序載入） ============ -->
-  <script type="text/babel" data-presets="env,react" src="shared/mock-data.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/store.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/components.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/charts.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/maps.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/mobile-kit.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/business-widgets.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/layout.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="shared/home.js?v=2"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/mock-data.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/store.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/components.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/charts.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/maps.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/mobile-kit.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/business-widgets.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/tour.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/tour-steps.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/layout.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="shared/home.js?v=3"></script>
 
   <!-- ============ Subsystems ============ -->
-  <script type="text/babel" data-presets="env,react" src="subsystems/login.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/dashboard.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/inspection.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/repair.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/mobile.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/annual-report.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/pcces.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/security.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/integration.js?v=2"></script>
-  <script type="text/babel" data-presets="env,react" src="subsystems/project.js?v=2"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/login.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/dashboard.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/inspection.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/repair.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/mobile.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/annual-report.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/pcces.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/security.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/integration.js?v=3"></script>
+  <script type="text/babel" data-presets="env,react" src="subsystems/project.js?v=3"></script>
 
   <!-- ============ App Bootstrap ============ -->
   <script type="text/babel" data-presets="env,react">
@@ -91,7 +93,10 @@
       return (
         <SP.StoreProvider>
           <HashRouter>
-            <App />
+            <SP.TourProvider steps={SP.TOUR_STEPS}>
+              <App />
+              <SP.WelcomeWrapper />
+            </SP.TourProvider>
           </HashRouter>
         </SP.StoreProvider>
       );

@@ -171,7 +171,7 @@ SP.AppHeader = function AppHeader() {
 
       <div className="app-header__actions">
         {/* 區處下拉 */}
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative" }} data-tour="region-switcher">
           <button className="app-header__action" onClick={() => setRegionMenuOpen(o => !o)}>
             🏛 {state.currentRegion} ▾
           </button>
@@ -188,7 +188,7 @@ SP.AppHeader = function AppHeader() {
         </div>
 
         {/* 通知 */}
-        <button className="app-header__action app-header__action--bell" title="通知">
+        <button className="app-header__action app-header__action--bell" title="通知" data-tour="bell">
           🔔
           {unreadCount > 0 && <span className="app-header__bell-count">{unreadCount}</span>}
         </button>
@@ -199,7 +199,7 @@ SP.AppHeader = function AppHeader() {
         </button>
 
         {/* 角色快切（demo 用） */}
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative" }} data-tour="role-switcher">
           <button className="app-header__action" onClick={() => setRoleMenuOpen(o => !o)}>
             🎭 角色快切 ▾
           </button>
@@ -220,12 +220,31 @@ SP.AppHeader = function AppHeader() {
           )}
         </div>
 
+        {/* 教學按鈕 */}
+        <SP.TourHelpButton />
+
         {/* 重置示範 */}
-        <button className="app-header__action" onClick={resetDemo} title="清 localStorage 重新初始化">
+        <button className="app-header__action" onClick={resetDemo} title="清 localStorage 重新初始化" data-tour="reset">
           ⚙ 重置示範
         </button>
       </div>
     </header>
+  );
+};
+
+/* ---------- TourHelpButton（連到 SP.TourContext） ---------- */
+SP.TourHelpButton = function TourHelpButton() {
+  const ctx = React.useContext(SP.TourContext);
+  if (!ctx) return null;
+  return (
+    <button
+      className="app-header__action"
+      onClick={() => ctx.start(0)}
+      title="重新開始操作教學"
+      data-tour="help"
+    >
+      ❓ 教學
+    </button>
   );
 };
 
@@ -271,7 +290,7 @@ SP.AppNav = function AppNav() {
   };
 
   return (
-    <nav className="app-nav" aria-label="主導航">
+    <nav className="app-nav" aria-label="主導航" data-tour="app-nav">
       {groups.map(group => (
         <div key={group.id} className="app-nav__group">
           <div className="app-nav__group-title">{group.title}</div>
@@ -298,7 +317,7 @@ SP.AppShell = function AppShell({ children }) {
       <SP.AppHeader />
       <div className="app-body">
         <SP.AppNav />
-        <main className="app-main">{children}</main>
+        <main className="app-main" data-tour="app-main">{children}</main>
       </div>
       <SP.ToastStack />
     </div>
